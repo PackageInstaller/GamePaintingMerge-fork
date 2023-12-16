@@ -15,6 +15,7 @@
 # 说明
 ## 原仓库[地址](https://github.com/Vistyxio/GamePaintingMerge)
 ## 拿大佬的过来改成了自己用的，只需要指定输入的文件夹以及对应Alpha文件的名称，就能批量合成
+## 也适用于其他的符合这两种类型的游戏
 
 # 依赖
 
