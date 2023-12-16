@@ -1,4 +1,4 @@
-# 明日方舟&amp;少女前线立绘合成
+# 立绘合成(明日方舟&amp;少女前线为例)
 
 # 原理
 
@@ -22,8 +22,4 @@ RGB文件在立绘外会有很多无意义的杂乱色块，必须通过与A文�
 
 # 依赖
 
-opencv_core450.dll
-
-opencv_imgcodecs450.dll
-
-opencv_imgproc450.dll
+opencv
