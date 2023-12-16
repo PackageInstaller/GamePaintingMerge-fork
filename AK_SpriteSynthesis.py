@@ -19,7 +19,9 @@ for root, dirs, files in os.walk(input_folder):
 
             output_path = os.path.join(root, file)  # 覆盖原始文件
             cv2.imwrite(output_path, dst)
+            print(f"合并: {output_path}")
 
             os.remove(os.path.join(root, mask_file))  # 删除_alpha文件
 
-            print(f"已更新并删除alpha文件: {output_path}")
+print("合并完成")
+
