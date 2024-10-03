@@ -3,7 +3,7 @@ import os
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 input_folder = "./立绘" # 输入文件夹路径
-mask_suffixes = ["_Alpha", "_alpha", "_mask", "_transparency"]  # 蒙版文件后缀，不区分大小写
+mask_suffixes = ["_alpha", "_mask", "_a"]  # 蒙版文件后缀，不区分大小写
 num_threads = 16  # 指定线程数
 
 def merge_images(file, root, lower_files, original_files):
