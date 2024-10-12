@@ -26,7 +26,7 @@ def merge_images(file, root, lower_files, original_files):
         alpha_path = os.path.join(root, mask_file)
 
         src = cv2.imread(rgb_path)
-        alpha = cv2.imread(alpha_path, cv2.IMREAD_UNCHANGED)  # 使用 IMREAD_UNCHANGED 读取包含 alpha 通道的图片
+        alpha = cv2.imread(alpha_path, cv2.IMREAD_UNCHANGED)
 
         if src is None:
             print(f"无法读取源图像: {file}")
@@ -35,33 +35,25 @@ def merge_images(file, root, lower_files, original_files):
             print(f"无法读取蒙版图像: {mask_file}")
             return
 
-        # 确保蒙版和源图像尺寸一致
         h1, w1, _ = src.shape
         alpha_resized = cv2.resize(alpha, (w1, h1), interpolation=cv2.INTER_CUBIC)
 
-        # 检查 alpha 通道
         if len(alpha_resized.shape) == 2:
-            # 如果是单通道图像（灰度图像），直接用它作为 alpha 通道
             mask = alpha_resized
         elif len(alpha_resized.shape) == 3 and alpha_resized.shape[2] == 4:
-            # 如果 alpha 图像有 4 个通道，则使用最后一个通道
             _, _, _, mask = cv2.split(alpha_resized)
         else:
             print(f"蒙版文件 '{mask_file}' 格式不正确，无法找到 alpha 通道")
             return
 
-        # 将灰度图像转换为与 src 相同的三维形状
+        # 灰度图像转换为与 src 相同的三维形状
         mask = np.expand_dims(mask, axis=2)
-
-        # 合并源图像和蒙版通道
         dst = cv2.merge((src, mask))
 
-        # 使用源图像名称覆盖原文件
-        output_path = os.path.join(root, file)  # 覆盖源图像
+        output_path = os.path.join(root, file)
         cv2.imwrite(output_path, dst)
         print(f"合并: {output_path}")
 
-        # 删除蒙版文件，源图像已更新，无需保留蒙版文件
         os.remove(alpha_path)
 
 def main():

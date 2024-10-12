@@ -32,7 +32,6 @@ def merge_images(file, root, lower_files, original_files):
             print(f"无法读取蒙版图像: {mask_file}")
             return
 
-        # 检查图像尺寸是否一致
         if src.shape[:2] != mask.shape:
             target_size = (
                 max(src.shape[0], mask.shape[0]),
@@ -42,7 +41,7 @@ def merge_images(file, root, lower_files, original_files):
             src = cv2.resize(src, target_size, interpolation=cv2.INTER_LINEAR)
             mask = cv2.resize(mask, target_size, interpolation=cv2.INTER_LINEAR)
 
-        # 将灰度图像转换为与 src 相同的三维形状
+        # 灰度图像转换为与 src 相同的三维形状
         mask = np.expand_dims(mask, axis=2)
 
         dst = cv2.merge((src, mask))
