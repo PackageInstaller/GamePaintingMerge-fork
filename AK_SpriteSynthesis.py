@@ -3,8 +3,8 @@ import os
 import numpy as np
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-input_folder = "./立绘" # 输入文件夹路径
-mask_suffixes = ["_alpha", "_mask", "_a"]  # 蒙版文件后缀,不区分大小写
+input_folder = ""  # 输入文件夹路径
+mask_suffixes = ["_alpha", "_mask", "_a"]  # 蒙版文件后缀，不区分大小写
 num_threads = 16  # 指定线程数
 
 def merge_images(file, root, lower_files, original_files):
@@ -32,6 +32,7 @@ def merge_images(file, root, lower_files, original_files):
             print(f"无法读取蒙版图像: {mask_file}")
             return
 
+        # 检查图像尺寸是否一致
         if src.shape[:2] != mask.shape:
             target_size = (
                 max(src.shape[0], mask.shape[0]),
@@ -40,7 +41,6 @@ def merge_images(file, root, lower_files, original_files):
 
             src = cv2.resize(src, target_size, interpolation=cv2.INTER_LINEAR)
             mask = cv2.resize(mask, target_size, interpolation=cv2.INTER_LINEAR)
-            print(f"已调整尺寸: {file} 和 {mask_file} 到 {target_size}")
 
         # 将灰度图像转换为与 src 相同的三维形状
         mask = np.expand_dims(mask, axis=2)
@@ -55,7 +55,7 @@ def merge_images(file, root, lower_files, original_files):
 
 def main():
     tasks = []
-    
+
     with ThreadPoolExecutor(max_workers=num_threads) as executor:
         for root, dirs, files in os.walk(input_folder):
             lower_files = [f.lower() for f in files]
@@ -63,10 +63,10 @@ def main():
             for file in files:
                 task = executor.submit(merge_images, file, root, lower_files, original_files)
                 tasks.append(task)
-        
+
         for task in as_completed(tasks):
             task.result()
-    
+
     print("合并完成")
 
 if __name__ == "__main__":
